@@ -70,7 +70,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			'#empty_option' => t('- Select a Province -'),
 			'#options' => NGetProvinces(),
 			'#ajax' => [
-				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::provinceChanged',
+				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::rebuildForm',
 				'progress' => [
 					'type' => 'throbber',
 					'event' => 'change',
@@ -91,7 +91,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			'#empty_option' => t('- Select a Canton -'),
 			'#options' => $cantons,
 			'#ajax' => [
-				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::cantonChanged',
+				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::rebuildForm',
 				'progress' => [
 					'type' => 'throbber',
 					'event' => 'change',
@@ -112,7 +112,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			'#empty_option' => t('- Select a District -'),
 			'#options' => $districts,
 			'#ajax' => [
-				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::districtChanged',
+				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::rebuildForm',
 				'progress' => [
 					'type' => 'throbber',
 					'event' => 'change',
@@ -130,12 +130,12 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			'#size' => 10,
 			'#value' => NgetZIPCodeByDistrict($optionSelected['district'], $optionSelected['canton']),
 			'#ajax' => [
-				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::zipcodeChanged'//,
 //				'progress' => [
 //					'type' => 'throbber',
 //					'event' => 'change',
 //					'message' => 'Getting Cantons'
 //				]
+				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::rebuildForm',
 			]
 		];
 	}
@@ -150,32 +150,11 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		];
 	}
 
-	function provinceChanged(&$form)
+	function rebuildForm(&$form)
 	{
 		$ajax_response = new AjaxResponse();
 		$ajax_response -> addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
 		return $ajax_response;
-	}
-
-	function cantonChanged(&$form)
-	{
-		$ajax_response = new AjaxResponse();
-		$ajax_response -> addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
-		return $ajax_response;
-	}
-
-	function districtChanged(&$form)
-	{
-		$ajax_response = new AjaxResponse();
-		$ajax_response -> addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
-		return $ajax_response;
-	}
-
-	function zipcodeChanged(&$form)
-	{
-//		$ajax_response = new AjaxResponse();
-//		$ajax_response -> addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
-//		return $ajax_response;
 	}
 
 }
