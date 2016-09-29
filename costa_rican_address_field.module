@@ -91,7 +91,10 @@ function NgetAddressByZIPCode($zip_code)
 		foreach ($province_cantons as $canton => $canton_districts) {
 			foreach ($canton_districts as $district => $zip_code_district) {
 				if ($zip_code == $zip_code_district) {
-					$result = $province . '-' . $canton . '-' . $district;
+//					$result = $province . '-' . $canton . '-' . $district;
+					$result['province'] = $province;
+					$result['canton'] = $canton;
+					$result['district'] = $district;
 					break;
 				}
 			}
