@@ -36,27 +36,55 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		else
 		{
 			$optionSelected = null;
+//			$items->getValue()
 		}
 
-		// Always show the Province field
-		$element['province'] = $this->generateProvinceField();
-
-		// If we have a province, show the Canton field
-		if ($optionSelected['province'] != null)
+		// If the Province/Canton/District fields were updated
+		if ($optionSelected['province'] != null || $optionSelected['canton'] != null || $optionSelected['district'] != null)
 		{
-			$element['canton'] = $this -> generateCantonField($optionSelected);
-		}
+			// Always show the Province field
+			$element['province'] = $this -> generateProvinceField();
 
-		// If we have a Canton, show the District field
-		if($optionSelected['canton'] != null)
+			// If we have a valid province, show the Canton field
+			if (in_array($optionSelected['province'], $element['province']['#options']))
+			{
+				$element['canton'] = $this -> generateCantonField($optionSelected['province']);
+			}
+
+			// If we have a valid Canton, show the District field
+			if(in_array($optionSelected['canton'], $element['canton']['#options'])) // this should evaluate to true "if a canton has been selected that belongs to the selected province"
+			{
+				// We need to skip this operation if the user updated the province and has not yet selected a canton
+				$element['district'] = $this -> generateDistrictField($optionSelected['canton']);
+			}
+
+
+			$validCantonSelected = in_array($optionSelected['canton'], $element['canton']['#options']);
+			$validDistrictSelected = in_array($optionSelected['district'], $element['district']['#options']);
+			// Always display the zipcode and additional info fields
+			if ( $validCantonSelected && $validDistrictSelected)
+			{
+				$element['zipcode'] = $this -> generateZipCodeField($optionSelected['district'], $optionSelected['canton']);
+			}
+			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
+		}
+		// Else if the address field was updated
+		else if ($optionSelected['zipcode'] != null)
 		{
-			$element['district'] = $this -> generateDistrictField($optionSelected);
+//			$address = NgetAddressByZIPCode($optionSelected['zipcode']);
+//
+//			$province = $address['province'];
+//			$canton = $address['canton'];
+//			$district = $address['district'];
 		}
-
-		// Always display the zipcode field
-		$element['zipcode'] = $this ->generateZipCodeField($optionSelected);
-
-		$element['additionalinfo'] = $this -> generateAdditionalInfoField();
+		// Default load functionality
+		else
+		{
+			// if we have data from the database, load it, otherwise load a blank form
+			$element['province'] = $this -> generateProvinceField();
+			$element['zipcode'] = $this -> generateZipCodeField($optionSelected['district'], $optionSelected['canton']);
+			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
+		}
 
 		return $element;
 	}
@@ -80,16 +108,14 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		];
 	}
 
-	function generateCantonField($optionSelected)
+	function generateCantonField($province)
 	{
-		$cantons = NgetCantons($optionSelected['province']);
-
 		return [
 			'#type' => 'select',
 			'#required' => FALSE,
 			'#title' => t('Canton'),
 			'#empty_option' => t('- Select a Canton -'),
-			'#options' => $cantons,
+			'#options' => NgetCantons($province),
 			'#ajax' => [
 				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::cantonChanged',
 				'progress' => [
@@ -101,41 +127,39 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		];
 	}
 
-	function generateDistrictField($optionSelected)
+	function generateDistrictField($canton)
 	{
-		$districts = NgetDistricts($optionSelected['canton']);
-
 		return [
 			'#type' => 'select',
 			'#required' => FALSE,
 			'#title' => t('District'),
 			'#empty_option' => t('- Select a District -'),
-			'#options' => $districts,
+			'#options' => NgetDistricts($canton) != null ? NgetDistricts($canton) : null,
 			'#ajax' => [
 				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::districtChanged',
 				'progress' => [
 					'type' => 'throbber',
 					'event' => 'change',
-					'message' => 'Getting Cantons'
+					'message' => 'Getting Districts'
 				]
 			]
 		];
 	}
 
-	function generateZipCodeField($optionSelected)
+	function generateZipCodeField($district, $canton)
 	{
 		return ['#type' => 'textfield',
 			'#title' => t('ZIP Code'),
 			'#required' => FALSE,
 			'#size' => 10,
-			'#value' => NgetZIPCodeByDistrict($optionSelected['district'], $optionSelected['canton']),
+			'#value' => NgetZIPCodeByDistrict($district, $canton),
 			'#ajax' => [
-				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::zipcodeChanged'//,
-//				'progress' => [
-//					'type' => 'throbber',
-//					'event' => 'change',
-//					'message' => 'Getting Cantons'
-//				]
+				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::zipcodeChanged',
+				'progress' => [
+					'type' => 'throbber',
+					'event' => 'change',
+					'message' => 'Getting Address'
+				]
 			]
 		];
 	}
@@ -177,5 +201,16 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 //		$ajax_response -> addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
 //		return $ajax_response;
 	}
+
+//	function buildFormFieldsFromZipcode($zipcode)
+//	{
+//		$address = NgetAddressByZIPCode($zipcode);
+//
+//		$province = $address['province'];
+//		$canton = $address['canton'];
+//		$district = $address['district'];
+//
+//
+//	}
 
 }
