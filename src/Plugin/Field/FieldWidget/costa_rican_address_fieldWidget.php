@@ -34,7 +34,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 	public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
 
 		$optionSelected =
-			isset($form_state -> getUserInput()['field_company_address'])
+			isset($form_state -> getUserInput()['field_company_address'][$delta])
 			? $form_state -> getUserInput()['field_company_address'][$delta]
 			: null;
 
