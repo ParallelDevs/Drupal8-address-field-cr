@@ -35,13 +35,14 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 		if (isset($form_state -> getUserInput()['field_company_address']))
 		{
-			$optionSelected = $form_state -> getUserInput()['field_company_address'][0];
+			$optionSelected = $form_state -> getUserInput()['field_company_address'][$delta];
 		}
 		else
 		{
 			$optionSelected = null;
-//			$items->getValue()
 		}
+
+		$values = $items -> getValue();
 
 		// If the Province/Canton/District fields were updated
 		if ($optionSelected['province'] != null || $optionSelected['canton'] != null || $optionSelected['district'] != null)
@@ -62,29 +63,59 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 				$element['district'] = $this -> generateDistrictField($optionSelected['canton']);
 			}
 
-
 			$validCantonSelected = in_array($optionSelected['canton'], $element['canton']['#options']);
 			$validDistrictSelected = in_array($optionSelected['district'], $element['district']['#options']);
+
 			// Always display the zipcode and additional info fields
 			if ( $validCantonSelected && $validDistrictSelected)
 			{
 				$element['zipcode'] = $this -> generateZipCodeField($optionSelected['district'], $optionSelected['canton']);
 			}
+
 			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 		}
+
 		// Else if the address field was updated
-		else if ($optionSelected['zipcode'] != null)
-		{
+//		else if ($optionSelected['zipcode'] != null)
+//		else if (preg_match('/\b\d{5}\b/g', $optionSelected['zipcode']))
+//		{
 //			$address = NgetAddressByZIPCode($optionSelected['zipcode']);
 //
 //			$province = $address['province'];
 //			$canton = $address['canton'];
 //			$district = $address['district'];
+//
+//			$element['province'] = $this -> generateProvinceField();
+//			$element['canton'] = $this -> generateCantonField($province);
+//			$element['district'] = $this -> generateDistrictField($canton);
+//
+//
+//			$element['province']['#default_value'] = $province;
+//			$element['canton']['#default_value'] =  $canton;
+//			$element['district']['#default_value'] = $district;
+//		}
+
+		// If we have data in the database, load it into the input fields.
+		else if (!empty($values[$delta]))
+		{
+			$element['province'] = $this -> generateProvinceField();
+			$element['province']['#default_value'] = $values[$delta]['province'];
+
+			$element['canton'] = $this -> generateCantonField($values[$delta]['province']);
+			$element['canton']['#default_value'] = $values[$delta]['canton'];
+
+			$element['district'] = $this -> generateDistrictField($values[$delta]['canton']);
+			$element['district']['#default_value'] = $values[$delta]['district'];
+
+			$element['zipcode'] = $this -> generateZipCodeField(null, null);
+			$element['zipcode']['#value'] = $values[$delta]['zipcode'];
+
+			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 		}
-		// Default load functionality
+
+		// Default load functionality (load blank form fields)
 		else
 		{
-			// if we have data from the database, load it, otherwise load a blank form
 			$element['province'] = $this -> generateProvinceField();
 			$element['zipcode'] = $this -> generateZipCodeField($optionSelected['district'], $optionSelected['canton']);
 			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
@@ -152,11 +183,11 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 	function generateZipCodeField($district, $canton)
 	{
-		return ['#type' => 'textfield',
+		$zipcode_field = [
+			'#type' => 'textfield',
 			'#title' => t('ZIP Code'),
 			'#required' => FALSE,
 			'#size' => 10,
-			'#value' => NgetZIPCodeByDistrict($district, $canton),
 			'#ajax' => [
 				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::zipcodeChanged',
 				'progress' => [
@@ -166,6 +197,13 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 				]
 			]
 		];
+
+		if($district != null || $canton != null)
+		{
+			$zipcode_field['#value'] = NgetZIPCodeByDistrict($district, $canton);
+		}
+
+		return $zipcode_field;
 	}
 
 	function generateAdditionalInfoField()
