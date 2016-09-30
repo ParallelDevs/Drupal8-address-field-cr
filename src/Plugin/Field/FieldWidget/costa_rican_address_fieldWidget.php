@@ -71,8 +71,8 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 		}
 
-		// Else if the address field was updated
-//		else if ($optionSelected['zipcode'] != null)
+		// If the address field was updated
+		else if ($optionSelected['zipcode'] != null)
 //		else if (preg_match('/\b\d{5}\b/g', $optionSelected['zipcode']))
 //		{
 //			$address = NgetAddressByZIPCode($optionSelected['zipcode']);
