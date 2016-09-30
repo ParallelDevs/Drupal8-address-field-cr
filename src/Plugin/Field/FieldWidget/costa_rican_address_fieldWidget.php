@@ -66,7 +66,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			$validCantonSelected = in_array($optionSelected['canton'], $element['canton']['#options']);
 			$validDistrictSelected = in_array($optionSelected['district'], $element['district']['#options']);
 
-			// Always display the zipcode and additional info fields
+			// Display the zipcode field if the user has selected a valid canton and district
 			if ( $validCantonSelected && $validDistrictSelected)
 			{
 				$element['zipcode'] = $this -> generateZipCodeField($optionSelected['district'], $optionSelected['canton']);
