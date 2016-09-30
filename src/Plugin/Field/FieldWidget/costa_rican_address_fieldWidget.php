@@ -25,6 +25,10 @@ use Drupal\Core\Form\FormStateInterface;
 class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterface  {
 	/**
 	 * {@inheritdoc}
+	 *
+	 * This function generates the arrays used by Drupal to construct the HTML input elements for our custom field on the node edit page. Thus, it is called once for every element in our widget.
+	 *
+	 * The body of the function is comprised of a large if statement to figure out the situation under which the elements are being built (or rebuilt), and to create elements and load data into them as required by that situation.
 	 */
 
 	public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
