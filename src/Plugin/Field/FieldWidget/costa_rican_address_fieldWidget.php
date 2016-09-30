@@ -165,7 +165,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			'#required' => FALSE,
 			'#title' => t('District'),
 			'#empty_option' => t('- Select a District -'),
-			'#options' => NgetDistricts($canton) != null ? NgetDistricts($canton) : null,
+			'#options' => NgetDistricts($canton),
 			'#ajax' => [
 				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::districtChanged',
 				'progress' => [
