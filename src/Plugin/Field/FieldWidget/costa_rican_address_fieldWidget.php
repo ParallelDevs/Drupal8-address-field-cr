@@ -245,15 +245,4 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 //		return $ajax_response;
 	}
 
-//	function buildFormFieldsFromZipcode($zipcode)
-//	{
-//		$address = NgetAddressByZIPCode($zipcode);
-//
-//		$province = $address['province'];
-//		$canton = $address['canton'];
-//		$district = $address['district'];
-//
-//
-//	}
-
 }
