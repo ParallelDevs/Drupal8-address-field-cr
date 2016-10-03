@@ -33,7 +33,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 	public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
 
-		$optionSelected =
+		$fieldCurrentlyModifying =
 			isset($form_state -> getUserInput()['field_company_address'][$delta])
 			? $form_state -> getUserInput()['field_company_address'][$delta]
 			: null;
@@ -41,55 +41,56 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		$values = $items -> getValue();
 
 		// If the Province/Canton/District fields were updated
-		if ($optionSelected['province'] != null || $optionSelected['canton'] != null || $optionSelected['district'] != null)
+		if ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][province]" ||
+			$_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][canton]" ||
+			$_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][district]")
 		{
 			// Always show the Province field
 			$element['province'] = $this -> generateProvinceField();
 
 			// If we have a valid province, show the Canton field
-			if (in_array($optionSelected['province'], $element['province']['#options']))
+			if (in_array($fieldCurrentlyModifying['province'], $element['province']['#options']))
 			{
-				$element['canton'] = $this -> generateCantonField($optionSelected['province']);
+				$element['canton'] = $this -> generateCantonField($fieldCurrentlyModifying['province']);
 			}
 
 			// If we have a valid Canton, show the District field
-			if(in_array($optionSelected['canton'], $element['canton']['#options'])) // this should evaluate to true "if a canton has been selected that belongs to the selected province"
+			if(in_array($fieldCurrentlyModifying['canton'], $element['canton']['#options'])) // this should evaluate to true "if a canton has been selected that belongs to the selected province"
 			{
 				// We need to skip this operation if the user updated the province and has not yet selected a canton
-				$element['district'] = $this -> generateDistrictField($optionSelected['canton']);
+				$element['district'] = $this -> generateDistrictField($fieldCurrentlyModifying['canton']);
 			}
 
-			$validCantonSelected = in_array($optionSelected['canton'], $element['canton']['#options']);
-			$validDistrictSelected = in_array($optionSelected['district'], $element['district']['#options']);
+			$validCantonSelected = in_array($fieldCurrentlyModifying['canton'], $element['canton']['#options']);
+			$validDistrictSelected = in_array($fieldCurrentlyModifying['district'], $element['district']['#options']);
 
 			// Display the zipcode field if the user has selected a valid canton and district
 			if ( $validCantonSelected && $validDistrictSelected)
 			{
-				$element['zipcode'] = $this -> generateZipCodeField($optionSelected['district'], $optionSelected['canton']);
+				$element['zipcode'] = $this -> generateZipCodeField($fieldCurrentlyModifying['district'], $fieldCurrentlyModifying['canton']);
 			}
 
 			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 		}
 
-		// If the address field was updated
-		else if ($optionSelected['zipcode'] != null)
-//		else if (preg_match('/\b\d{5}\b/g', $optionSelected['zipcode']))
-//		{
-//			$address = NgetAddressByZIPCode($optionSelected['zipcode']);
-//
-//			$province = $address['province'];
-//			$canton = $address['canton'];
-//			$district = $address['district'];
-//
-//			$element['province'] = $this -> generateProvinceField();
-//			$element['canton'] = $this -> generateCantonField($province);
-//			$element['district'] = $this -> generateDistrictField($canton);
-//
-//
-//			$element['province']['#default_value'] = $province;
-//			$element['canton']['#default_value'] =  $canton;
-//			$element['district']['#default_value'] = $district;
-//		}
+		// If the zipcode field was updated
+		else if ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][zipcode]")
+		{
+			$address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
+
+			$province = $address['province'];
+			$canton = $address['canton'];
+			$district = $address['district'];
+
+			$element['province'] = $this -> generateProvinceField();
+			$element['canton'] = $this -> generateCantonField($province);
+			$element['district'] = $this -> generateDistrictField($canton);
+
+
+			$element['province']['#default_value'] = $province;
+			$element['canton']['#default_value'] =  $canton;
+			$element['district']['#default_value'] = $district;
+		}
 
 		// If we have data in the database, load it into the input fields.
 		else if (!empty($values[$delta]))
@@ -113,7 +114,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		else
 		{
 			$element['province'] = $this -> generateProvinceField();
-			$element['zipcode'] = $this -> generateZipCodeField($optionSelected['district'], $optionSelected['canton']);
+			$element['zipcode'] = $this -> generateZipCodeField($fieldCurrentlyModifying['district'], $fieldCurrentlyModifying['canton']);
 			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 		}
 
