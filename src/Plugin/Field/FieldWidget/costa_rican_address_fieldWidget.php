@@ -55,23 +55,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 		$values = $items -> getValue();
 
-		// If we have address data in the database, load it into the form
-		if (!empty($values[$delta]))
-		{
-			$element['province'] = $this -> generateProvinceField();
-			$element['province']['#default_value'] = $values[$delta]['province'];
 
-			$element['canton'] = $this -> generateCantonField($values[$delta]['province']);
-			$element['canton']['#default_value'] = $values[$delta]['canton'];
-
-			$element['district'] = $this -> generateDistrictField($values[$delta]['canton']);
-			$element['district']['#default_value'] = $values[$delta]['district'];
-
-			$element['zipcode'] = $this -> generateZipCodeField(null, null);
-			$element['zipcode']['#value'] = $values[$delta]['zipcode'];
-
-			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
-		}
 
 		// If the field we're currently building is the field that was changed, update it appropriately
 		if ($delta === $deltaUpdated)
@@ -212,11 +196,28 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 				$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 			}
 
+			// If we have address data in the database, load it into the form
+			else if (!empty($values[$delta]))
+			{
+				$element['province'] = $this -> generateProvinceField();
+				$element['province']['#default_value'] = $values[$delta]['province'];
+
+				$element['canton'] = $this -> generateCantonField($values[$delta]['province']);
+				$element['canton']['#default_value'] = $values[$delta]['canton'];
+
+				$element['district'] = $this -> generateDistrictField($values[$delta]['canton']);
+				$element['district']['#default_value'] = $values[$delta]['district'];
+
+				$element['zipcode'] = $this -> generateZipCodeField(null, null);
+				$element['zipcode']['#value'] = $values[$delta]['zipcode'];
+
+				$element['additionalinfo'] = $this -> generateAdditionalInfoField();
+			}
+
 			// Else, load a blank form
 			else
 			{
 				$element['province'] = $this -> generateProvinceField();
-				$element['province']['#default_value'] = $values[$delta]['province'];
 				$element['zipcode'] = $this -> generateZipCodeField($fieldCurrentlyModifying['district'], $fieldCurrentlyModifying['canton']);
 				$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 			}
