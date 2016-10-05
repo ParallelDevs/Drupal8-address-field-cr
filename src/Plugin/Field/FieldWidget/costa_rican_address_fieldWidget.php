@@ -107,7 +107,6 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 					$element['canton'] = $this -> generateCantonField($province);
 					$element['district'] = $this -> generateDistrictField($canton);
 
-
 					$element['province']['#default_value'] = $province;
 					$element['canton']['#default_value'] =  $canton;
 					$element['district']['#default_value'] = $district;
@@ -115,7 +114,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			}
 		}
 
-		// Else if the field we're currently building wasn't changed.
+		// Else if the field we're currently building wasn't changed, rebuild it with the original data.
 		else if (is_int($deltaUpdated) && $delta != $deltaUpdated)
 		{
 			// Build and restore the value of the provice field.
