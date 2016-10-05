@@ -38,7 +38,10 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			? $form_state -> getUserInput()['field_company_address'][$delta]
 			: null;
 
-		$triggeringElement = $_REQUEST['_triggering_element_name'];
+		$triggeringElement =
+			isset($_REQUEST['_triggering_element_name'])
+			? $_REQUEST['_triggering_element_name']
+			: null;
 
 		if ($triggeringElement === null || $triggeringElement == "field_company_address_add_more")
 		{
@@ -173,7 +176,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 		else
 		{
-			if ($_REQUEST['_triggering_element_name'] == "field_company_address_add_more")
+			if ($triggeringElement == "field_company_address_add_more")
 			{
 				// Build and restore the value of the provice field
 				$element['province'] = $this -> generateProvinceField();
