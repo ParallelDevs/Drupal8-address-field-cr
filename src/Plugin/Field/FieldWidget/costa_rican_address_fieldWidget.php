@@ -35,13 +35,13 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 		$fieldCurrentlyModifying =
 			isset($form_state -> getUserInput()['field_company_address'][$delta])
-			? $form_state -> getUserInput()['field_company_address'][$delta]
-			: null;
+				? $form_state -> getUserInput()['field_company_address'][$delta]
+				: null;
 
 		$triggeringElement =
 			isset($_REQUEST['_triggering_element_name'])
-			? $_REQUEST['_triggering_element_name']
-			: null;
+				? $_REQUEST['_triggering_element_name']
+				: null;
 
 		if ($triggeringElement === null || $triggeringElement == "field_company_address_add_more")
 		{
@@ -55,29 +55,31 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 		$values = $items -> getValue();
 
+		// If we have address data in the database, load it into the form
+		if (!empty($values[$delta]))
+		{
+			$element['province'] = $this -> generateProvinceField();
+			$element['province']['#default_value'] = $values[$delta]['province'];
+
+			$element['canton'] = $this -> generateCantonField($values[$delta]['province']);
+			$element['canton']['#default_value'] = $values[$delta]['canton'];
+
+			$element['district'] = $this -> generateDistrictField($values[$delta]['canton']);
+			$element['district']['#default_value'] = $values[$delta]['district'];
+
+			$element['zipcode'] = $this -> generateZipCodeField(null, null);
+			$element['zipcode']['#value'] = $values[$delta]['zipcode'];
+
+			$element['additionalinfo'] = $this -> generateAdditionalInfoField();
+		}
+
 		// If the field we're currently building is the field that was changed, update it appropriately
 		if ($delta === $deltaUpdated)
 		{
-			// If we have address data in the database, load it into the form
-			if (!empty($values[$delta]))
-			{
-				$element['province'] = $this -> generateProvinceField();
-				$element['province']['#default_value'] = $values[$delta]['province'];
 
-				$element['canton'] = $this -> generateCantonField($values[$delta]['province']);
-				$element['canton']['#default_value'] = $values[$delta]['canton'];
-
-				$element['district'] = $this -> generateDistrictField($values[$delta]['canton']);
-				$element['district']['#default_value'] = $values[$delta]['district'];
-
-				$element['zipcode'] = $this -> generateZipCodeField(null, null);
-				$element['zipcode']['#value'] = $values[$delta]['zipcode'];
-
-				$element['additionalinfo'] = $this -> generateAdditionalInfoField();
-			}
 
 			// Else, if a dropdown field was changed, rebuild the form accordingly
-			else if (isset($_REQUEST['_triggering_element_name']))
+			if (isset($_REQUEST['_triggering_element_name']))
 			{
 				// If canton/province/district was changed.
 				if ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][province]" ||
