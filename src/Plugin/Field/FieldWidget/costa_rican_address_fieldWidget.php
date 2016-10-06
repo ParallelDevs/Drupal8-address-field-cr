@@ -97,25 +97,23 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 				// Else if the zipcode field was changed.
 				else if ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][zipcode]")
 				{
+					// Get the address (province/canton/district) for the given zipcode
 					$address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
 
 					// If the user changed the zipcode field to a valid zipcode, rebuild the input field.
 					if (!empty($address))
 					{
-
-						$province = $address['province'];
-						$canton = $address['canton'];
-						$district = $address['district'];
-
+						// Generate the fields
 						$element['province'] = $this -> generateProvinceField();
-						$element['canton'] = $this -> generateCantonField($province);
-						$element['district'] = $this -> generateDistrictField($canton);
+						$element['canton'] = $this -> generateCantonField($address['province']);
+						$element['district'] = $this -> generateDistrictField($address['canton']);
 						$element['zipcode'] = $this -> generateZipCodeField(null, null);
 						$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 
-						$element['province']['#default_value'] = $province;
-						$element['canton']['#default_value'] =  $canton;
-						$element['district']['#default_value'] = $district;
+						// Set the default values of the fields
+						$element['province']['#default_value'] = $address['province'];
+						$element['canton']['#default_value'] =  $address['canton'];
+						$element['district']['#default_value'] = $address['district'];
 						$element['zipcode']['#default_value'] = $fieldCurrentlyModifying['zipcode'];
 						$element['additionalinfo']['#default_value'] = $fieldCurrentlyModifying['additionalinfo'];
 					}
@@ -231,6 +229,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 	function loadBlankAddressField($element)
 	{
+		// Generate blank province, zipcode, and additional fields
 		$element['province'] = $this -> generateProvinceField();
 		$element['zipcode'] = $this -> generateZipCodeField(null, null);
 		$element['additionalinfo'] = $this -> generateAdditionalInfoField();
