@@ -97,23 +97,32 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 				// Else if the zipcode field was changed.
 				else if ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][zipcode]")
 				{
-					$address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
+					// If the user changed the field to an empty string, do nothing.
+					if (preg_match('/\b\d{5}\b/g', $fieldCurrentlyModifying['zipcode']))
+					{
+						$address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
 
-					$province = $address['province'];
-					$canton = $address['canton'];
-					$district = $address['district'];
+						$province = $address['province'];
+						$canton = $address['canton'];
+						$district = $address['district'];
 
-					$element['province'] = $this -> generateProvinceField();
-					$element['canton'] = $this -> generateCantonField($province);
-					$element['district'] = $this -> generateDistrictField($canton);
-					$element['zipcode'] = $this -> generateZipCodeField();
-					$element['additionalinfo'] = $this -> generateAdditionalInfoField();
+						$element['province'] = $this -> generateProvinceField();
+						$element['canton'] = $this -> generateCantonField($province);
+						$element['district'] = $this -> generateDistrictField($canton);
+						$element['zipcode'] = $this -> generateZipCodeField(null, null);
+						$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 
-					$element['province']['#default_value'] = $province;
-					$element['canton']['#default_value'] =  $canton;
-					$element['district']['#default_value'] = $district;
-					$element['zipcode']['#default_value'] = $fieldCurrentlyModifying['zipcode'];
-					$element['additionalinfo']['#default_value'] = $fieldCurrentlyModifying['additionalinfo'];
+						$element['province']['#default_value'] = $province;
+						$element['canton']['#default_value'] =  $canton;
+						$element['district']['#default_value'] = $district;
+						$element['zipcode']['#default_value'] = $fieldCurrentlyModifying['zipcode'];
+						$element['additionalinfo']['#default_value'] = $fieldCurrentlyModifying['additionalinfo'];
+					}
+					else
+					{
+						$element = $this->loadBlankAddressField($element);
+						$element['zipcode']['#value'] = "";
+					}
 				}
 			}
 		}
