@@ -112,7 +112,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 						// Set the default values of the fields
 						$element['province']['#default_value'] = $address['province'];
-						$element['canton']['#default_value'] =  $address['canton'];
+						$element['canton']['#default_value'] = $address['canton'];
 						$element['district']['#default_value'] = $address['district'];
 						$element['zipcode']['#default_value'] = $fieldCurrentlyModifying['zipcode'];
 						$element['additionalinfo']['#default_value'] = $fieldCurrentlyModifying['additionalinfo'];
