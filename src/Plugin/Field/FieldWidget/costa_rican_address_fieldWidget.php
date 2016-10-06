@@ -106,10 +106,14 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 					$element['province'] = $this -> generateProvinceField();
 					$element['canton'] = $this -> generateCantonField($province);
 					$element['district'] = $this -> generateDistrictField($canton);
+					$element['zipcode'] = $this -> generateZipCodeField();
+					$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 
 					$element['province']['#default_value'] = $province;
 					$element['canton']['#default_value'] =  $canton;
 					$element['district']['#default_value'] = $district;
+					$element['zipcode']['#default_value'] = $fieldCurrentlyModifying['zipcode'];
+					$element['additionalinfo']['#default_value'] = $fieldCurrentlyModifying['additionalinfo'];
 				}
 			}
 		}
