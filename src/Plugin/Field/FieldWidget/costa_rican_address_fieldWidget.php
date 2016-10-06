@@ -312,7 +312,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			]
 		];
 
-		if($district != null || $canton != null)
+		if($district != null && $canton != null)
 		{
 			$zipcode_field['#value'] = NgetZIPCodeByDistrict($district, $canton);
 		}
