@@ -284,7 +284,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			'#required' => FALSE,
 			'#size' => 10,
 			'#ajax' => [
-				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::zipcodeChanged',
+				'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
 				'progress' => [
 					'type' => 'throbber',
 					'event' => 'change',
@@ -312,13 +312,6 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 	}
 
 	function replaceFormCallback(&$form)
-	{
-		$ajax_response = new AjaxResponse();
-		$ajax_response -> addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
-		return $ajax_response;
-	}
-
-	function zipcodeChanged(&$form)
 	{
 		$ajax_response = new AjaxResponse();
 		$ajax_response -> addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
