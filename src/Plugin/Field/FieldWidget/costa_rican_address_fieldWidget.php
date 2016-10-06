@@ -168,10 +168,13 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		{
 			if ($triggeringElement == "field_company_address_add_more")
 			{
-				// Build and restore the value of the province field.
+				// Build the province field.
 				$element['province'] = $this -> generateProvinceField();
+
+				// If we have data stored for this field.
 				if ($fieldCurrentlyModifying['province'] != "" && $fieldCurrentlyModifying['province'] != null)
 				{
+					// Populate the newly rebuilt field with that data.
 					$element['province']['#default_value'] = $fieldCurrentlyModifying['province'];
 				}
 
