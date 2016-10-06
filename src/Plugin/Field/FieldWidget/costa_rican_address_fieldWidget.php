@@ -97,10 +97,11 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 				// Else if the zipcode field was changed.
 				else if ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][zipcode]")
 				{
-					// If the user changed the field to an empty string, do nothing.
-					if (preg_match('/\b\d{5}\b/g', $fieldCurrentlyModifying['zipcode']))
+					$address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
+
+					// If the user changed the zipcode field to a valid zipcode, rebuild the input field.
+					if (!empty($address))
 					{
-						$address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
 
 						$province = $address['province'];
 						$canton = $address['canton'];
@@ -118,6 +119,8 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 						$element['zipcode']['#default_value'] = $fieldCurrentlyModifying['zipcode'];
 						$element['additionalinfo']['#default_value'] = $fieldCurrentlyModifying['additionalinfo'];
 					}
+
+					// Otherwise build a blank address field and set zipcode to null.
 					else
 					{
 						$element = $this->loadBlankAddressField($element);
