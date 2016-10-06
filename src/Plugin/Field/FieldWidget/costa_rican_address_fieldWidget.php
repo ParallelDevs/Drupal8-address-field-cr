@@ -210,11 +210,18 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 			// Else, load a blank form.
 			else
 			{
-				$element['province'] = $this -> generateProvinceField();
-				$element['zipcode'] = $this -> generateZipCodeField($fieldCurrentlyModifying['district'], $fieldCurrentlyModifying['canton']);
-				$element['additionalinfo'] = $this -> generateAdditionalInfoField();
+				$element = $this->loadBlankAddressField($element);
 			}
 		}
+
+		return $element;
+	}
+
+	function loadBlankAddressField($element)
+	{
+		$element['province'] = $this -> generateProvinceField();
+		$element['zipcode'] = $this -> generateZipCodeField(null, null);
+		$element['additionalinfo'] = $this -> generateAdditionalInfoField();
 
 		return $element;
 	}
