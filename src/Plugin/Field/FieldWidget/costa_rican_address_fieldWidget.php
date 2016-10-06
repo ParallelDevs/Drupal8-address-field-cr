@@ -315,7 +315,8 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 					'type' => 'throbber',
 					'event' => 'change',
 					'message' => 'Getting Address'
-				]
+				],
+				'disable-refocus' => true
 			]
 		];
 
