@@ -32,23 +32,25 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
 
-    $fieldCurrentlyModifying =
-    isset($form_state->getUserInput()['field_company_address'][$delta])
-                ? $form_state->getUserInput()['field_company_address'][$delta]
-                : NULL;
-
 	  // Create variable to hold identifier for the element that was changed (or triggered).
     $triggeringElement = \Drupal::request()->get('_triggering_element_name');
+
+		// This variable is a reference to any addresses that were found in the DB for the node currently being loaded.
+	  $values = $items->getValue();
+
+	  $fieldCurrentlyModifying =
+		  isset($form_state->getUserInput()['field_company_address'][$delta])
+			  ? $form_state->getUserInput()['field_company_address'][$delta]
+			  : NULL;
+
 
     if ($triggeringElement === NULL || $triggeringElement == "field_company_address_add_more") {
       $deltaUpdated = NULL;
     }
     else {
-      $filteredVar = filter_var($triggeringElement, FILTER_SANITIZE_NUMBER_INT);
-      $deltaUpdated = intval($filteredVar);
+    	// Parse the triggering element identifier for the int corresponding to the delta of the element changed.
+      $deltaUpdated = intval(filter_var($triggeringElement, FILTER_SANITIZE_NUMBER_INT));
     }
-
-    $values = $items->getValue();
 
     // If the field we're currently building is the field that was changed, update it appropriately.
     if ($delta === $deltaUpdated) {
