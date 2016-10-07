@@ -12,102 +12,111 @@ use Drupal\Core\Routing\RouteMatchInterface;
  */
 function costa_rican_address_field_help($route_name, RouteMatchInterface $route_match) {
 
-
-
 }
 
+/**
+ *
+ */
+function NgetProvinces() {
+  $result = [];
+  $addresses = NgetAddresses();
 
-function NgetProvinces()
-{
-	$result = [];
-	$addresses = NgetAddresses();
+  foreach ($addresses as $province => $province_cantons) {
+    $result[$province] = $province;
+  }
 
-	foreach ($addresses as $province => $province_cantons) {
-		$result[$province] = $province;
-	}
-
-	return $result;
+  return $result;
 }
 
-function NgetCantons($province_name)
-{
-	$result = [];
-	$addresses = NgetAddresses();
+/**
+ *
+ */
+function NgetCantons($province_name) {
+  $result = [];
+  $addresses = NgetAddresses();
 
-	foreach ($addresses as $province => $province_cantons) {
-		foreach ($province_cantons as $canton => $canton_districts) {
-			if ($province == $province_name) {
-				$result[$canton] = $canton;
-			}
-		}
-	}
+  foreach ($addresses as $province => $province_cantons) {
+    foreach ($province_cantons as $canton => $canton_districts) {
+      if ($province == $province_name) {
+        $result[$canton] = $canton;
+      }
+    }
+  }
 
-	return $result;
+  return $result;
 }
 
-function NgetDistricts($canton_name)
-{
-	$result = [];
-	$addresses = NgetAddresses();
+/**
+ *
+ */
+function NgetDistricts($canton_name) {
+  $result = [];
+  $addresses = NgetAddresses();
 
-	foreach ($addresses as $province => $province_cantons) {
-		foreach ($province_cantons as $canton => $canton_districts) {
-			foreach ($canton_districts as $district => $postal_code) {
-				if ($canton == $canton_name) {
-					$result[$district] = $district;
-				}
-			}
-		}
-	}
+  foreach ($addresses as $province => $province_cantons) {
+    foreach ($province_cantons as $canton => $canton_districts) {
+      foreach ($canton_districts as $district => $postal_code) {
+        if ($canton == $canton_name) {
+          $result[$district] = $district;
+        }
+      }
+    }
+  }
 
-	return $result;
+  return $result;
 }
 
-function NgetZIPCodeByDistrict($district_name, $canton_name)
-{
-	$result = "";
-	$addresses = NgetAddresses();
+/**
+ *
+ */
+function NgetZIPCodeByDistrict($district_name, $canton_name) {
+  $result = "";
+  $addresses = NgetAddresses();
 
-	foreach ($addresses as $province => $province_cantons) {
-		foreach ($province_cantons as $canton => $canton_districts) {
-			foreach ($canton_districts as $district => $postal_code) {
-				if ($district == $district_name && $canton == $canton_name) {
-					$result = $postal_code;
-					break;
-				}
-			}
-		}
-	}
+  foreach ($addresses as $province => $province_cantons) {
+    foreach ($province_cantons as $canton => $canton_districts) {
+      foreach ($canton_districts as $district => $postal_code) {
+        if ($district == $district_name && $canton == $canton_name) {
+          $result = $postal_code;
+          break;
+        }
+      }
+    }
+  }
 
-	return $result;
+  return $result;
 }
 
-function NgetAddressByZIPCode($zip_code)
-{
-	$result = [];
-	$addresses = NgetAddresses();
+/**
+ *
+ */
+function NgetAddressByZIPCode($zip_code) {
+  $result = [];
+  $addresses = NgetAddresses();
 
-	foreach ($addresses as $province => $province_cantons) {
-		foreach ($province_cantons as $canton => $canton_districts) {
-			foreach ($canton_districts as $district => $zip_code_district) {
-				if ($zip_code == $zip_code_district) {
-//					$result = $province . '-' . $canton . '-' . $district;
-					$result['province'] = $province;
-					$result['canton'] = $canton;
-					$result['district'] = $district;
-					break;
-				}
-			}
-		}
-	}
+  foreach ($addresses as $province => $province_cantons) {
+    foreach ($province_cantons as $canton => $canton_districts) {
+      foreach ($canton_districts as $district => $zip_code_district) {
+        if ($zip_code == $zip_code_district) {
+          // $result = $province . '-' . $canton . '-' . $district;.
+          $result['province'] = $province;
+          $result['canton'] = $canton;
+          $result['district'] = $district;
+          break;
+        }
+      }
+    }
+  }
 
-	return $result;
+  return $result;
 }
 
-function NgetAddresses()
-{
-	return json_decode(
-		file_get_contents(dirname(__FILE__) . '/zips.json'),
-		true
-	);
+/**
+ *
+ */
+function NgetAddresses() {
+  return json_decode(
+        file_get_contents(dirname(__FILE__) . '/zips.json'),
+        TRUE
+  );
 }
