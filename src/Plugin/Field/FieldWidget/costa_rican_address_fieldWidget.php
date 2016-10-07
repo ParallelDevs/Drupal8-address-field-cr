@@ -291,7 +291,8 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
   }
 
   /**
-   *
+   * This function returns the Drupal form field generation array for the zipcode field.
+   * It takes two paramaters. If they are both not null the function will include array elements to put the zipcode that corresponds to that canton/district as the default value of the field.
    */
   public function generateZipCodeField($district, $canton) {
     $zipcode_field = [
@@ -310,6 +311,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       ],
     ];
 
+	// If we got a district and canton, set the value of the zipcode field to the corrosponding zipcode.
     if ($district != NULL && $canton != NULL) {
       $zipcode_field['#value'] = NgetZIPCodeByDistrict($district, $canton);
     }
@@ -318,7 +320,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
   }
 
   /**
-   *
+   * This function generates the additional info field. It's pretty straight forward, not a lot to see here.
    */
   public function generateAdditionalInfoField() {
     return [
