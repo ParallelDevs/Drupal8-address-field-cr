@@ -37,10 +37,8 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
                 ? $form_state->getUserInput()['field_company_address'][$delta]
                 : NULL;
 
-    $triggeringElement =
-    isset($_REQUEST['_triggering_element_name'])
-                ? $_REQUEST['_triggering_element_name']
-                : NULL;
+	  // Create variable to hold identifier for the element that was changed (or triggered).
+    $triggeringElement = \Drupal::request()->get('_triggering_element_name');
 
     if ($triggeringElement === NULL || $triggeringElement == "field_company_address_add_more") {
       $deltaUpdated = NULL;
@@ -55,11 +53,11 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
     // If the field we're currently building is the field that was changed, update it appropriately.
     if ($delta === $deltaUpdated) {
       // If a dropdown field was changed, rebuild the form accordingly.
-      if (isset($_REQUEST['_triggering_element_name'])) {
+      if (isset($triggeringElement)) {
         // If canton/province/district was changed.
-        if ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][province]" ||
-        $_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][canton]" ||
-        $_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][district]") {
+        if ($triggeringElement == "field_company_address[" . $delta . "][province]" ||
+        $triggeringElement == "field_company_address[" . $delta . "][canton]" ||
+        $triggeringElement == "field_company_address[" . $delta . "][district]") {
           // Always show the Province field.
           $element['province'] = $this->generateProvinceField();
 
@@ -88,7 +86,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
         // Else if the zipcode field was changed.
         // I think we need to check $delta here somehow.
-        elseif ($_REQUEST['_triggering_element_name'] == "field_company_address[" . $delta . "][zipcode]") {
+        elseif ($triggeringElement == "field_company_address[" . $delta . "][zipcode]") {
           // Get the address (province/canton/district) for the given zipcode.
           $address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
 
