@@ -63,8 +63,9 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       if (isset($triggeringElement)) {
         // If canton/province/district was changed.
         if ($triggeringElement == $field_name . "[" . $delta . "][province]" ||
-        $triggeringElement == $field_name . "[" . $delta . "][canton]" ||
-        $triggeringElement == $field_name . "[" . $delta . "][district]") {
+            $triggeringElement == $field_name . "[" . $delta . "][canton]" ||
+            $triggeringElement == $field_name . "[" . $delta . "][district]" &&
+            $element['province'] != null) {
           // Always show the Province field.
           $element['province'] = $this->generateProvinceField();
 
