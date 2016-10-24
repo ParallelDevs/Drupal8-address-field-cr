@@ -96,24 +96,24 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
           if (!empty($address)) {
             // Generate the fields.
             $element['province'] = $this->generateProvinceField();
-            $element['province']['#default_value'] = $address["province"];
+            $element['province']['#value'] = $address["province"];
 
             $element['canton'] = $this->generateCantonField($address['province']);
-            $element['canton']['#default_value'] = $address['canton'];
+            $element['canton']['#value'] = $address['canton'];
 
             $element['district'] = $this->generateDistrictField($address['canton']);
-            $element['district']['#default_value'] = $address['district'];
+            $element['district']['#value'] = $address['district'];
 
             $element['zipcode'] = $this->generateZipCodeField(NULL, NULL);
-            $element['zipcode']['#default_value'] = $fieldCurrentlyModifying['zipcode'];
+            $element['zipcode']['#value'] = $fieldCurrentlyModifying['zipcode'];
 
             $element['additionalinfo'] = $this->generateAdditionalInfoField();
-            $element['additionalinfo']['#default_value'] = $fieldCurrentlyModifying['additionalinfo'];
+            $element['additionalinfo']['#value'] = $fieldCurrentlyModifying['additionalinfo'];
           }
 
           // Otherwise build a blank address field and set zipcode to null.
           else {
-            $element = $this->loadBlankAddressField($element);
+            $element['additionalinfo'] = $this->loadBlankAddressField($element);
             $element['zipcode']['#value'] = "";
           }
         }
@@ -125,7 +125,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       // Build and restore the value of the provice field.
       $element['province'] = $this->generateProvinceField();
       if ($fieldCurrentlyModifying['province'] != "" && $fieldCurrentlyModifying['province'] != NULL) {
-        $element['province']['#default_value'] = $fieldCurrentlyModifying['province'];
+        $element['province']['#value'] = $fieldCurrentlyModifying['province'];
       }
 
       // If we have a valid province, show the Canton field.
@@ -160,7 +160,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
         // If we have data stored for this field.
         if ($fieldCurrentlyModifying['province'] != "" && $fieldCurrentlyModifying['province'] != NULL) {
           // Populate the newly rebuilt field with that data.
-          $element['province']['#default_value'] = $fieldCurrentlyModifying['province'];
+          $element['province']['#value'] = $fieldCurrentlyModifying['province'];
         }
 
         // If we have a valid province, show the Canton field.
@@ -192,13 +192,13 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       // If we have address data in the database, load it into the form.
       elseif (!empty($values[$delta])) {
         $element['province'] = $this->generateProvinceField();
-        $element['province']['#default_value'] = $values[$delta]['province'];
+        $element['province']['#value'] = $values[$delta]['province'];
 
         $element['canton'] = $this->generateCantonField($values[$delta]['province']);
-        $element['canton']['#default_value'] = $values[$delta]['canton'];
+        $element['canton']['#value'] = $values[$delta]['canton'];
 
         $element['district'] = $this->generateDistrictField($values[$delta]['canton']);
-        $element['district']['#default_value'] = $values[$delta]['district'];
+        $element['district']['#value'] = $values[$delta]['district'];
 
         $element['zipcode'] = $this->generateZipCodeField(NULL, NULL);
         $element['zipcode']['#value'] = $values[$delta]['zipcode'];
