@@ -113,8 +113,11 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
           // Otherwise build a blank address field and set zipcode to null.
           else {
-            $element['additionalinfo'] = $this->loadBlankAddressField($element);
-            $element['zipcode']['#value'] = "";
+            $element = $this->loadBlankAddressField($element);
+
+	          // Reset the province and zipcode values.
+	          $element['province']['#value'] = "";
+	          $element['zipcode']['#value'] = "";
           }
         }
       }
