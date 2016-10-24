@@ -23,6 +23,8 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterface {
 
+	static $field_name = "field_company_address";
+
   /**
    * {@inheritdoc}
    *
@@ -32,6 +34,9 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
 
+  	// Get the name of the field from the class.
+  	$field_name = costa_rican_address_fieldWidget::$field_name;
+
 	  // Create variable to hold identifier for the element that was changed (or triggered).
     $triggeringElement = \Drupal::request()->get('_triggering_element_name');
 
@@ -39,8 +44,8 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 	  $values = $items->getValue();
 
 	  $fieldCurrentlyModifying =
-		  isset($form_state->getUserInput()['field_company_address'][$delta])
-			  ? $form_state->getUserInput()['field_company_address'][$delta]
+		  isset($form_state->getUserInput()[$field_name][$delta])
+			  ? $form_state->getUserInput()[$field_name][$delta]
 			  : NULL;
 
 
@@ -57,9 +62,9 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       // If a dropdown field was changed, rebuild the form accordingly.
       if (isset($triggeringElement)) {
         // If canton/province/district was changed.
-        if ($triggeringElement == "field_company_address[" . $delta . "][province]" ||
-        $triggeringElement == "field_company_address[" . $delta . "][canton]" ||
-        $triggeringElement == "field_company_address[" . $delta . "][district]") {
+        if ($triggeringElement == $field_name . "[" . $delta . "][province]" ||
+        $triggeringElement == $field_name . "[" . $delta . "][canton]" ||
+        $triggeringElement == $field_name . "[" . $delta . "][district]") {
           // Always show the Province field.
           $element['province'] = $this->generateProvinceField();
 
@@ -88,7 +93,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
         // Else if the zipcode field was changed.
         // I think we need to check $delta here somehow.
-        elseif ($triggeringElement == "field_company_address[" . $delta . "][zipcode]") {
+        elseif ($triggeringElement == $field_name . "[" . $delta . "][zipcode]") {
           // Get the address (province/canton/district) for the given zipcode.
           $address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
 
@@ -156,7 +161,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
     // Else if nothing was updated, rebuild the field as it was, rebuild it from the DB, or load a blank one.
     else {
-      if ($triggeringElement == "field_company_address_add_more") {
+      if ($triggeringElement == $field_name . "_add_more") {
         // Build the province field.
         $element['province'] = $this->generateProvinceField();
 
@@ -339,7 +344,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
    */
   public function replaceFormCallback(&$form) {
     $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form['field_company_address']));
+    $ajax_response->addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form[costa_rican_address_fieldWidget::$field_name]));
     return $ajax_response;
   }
 
