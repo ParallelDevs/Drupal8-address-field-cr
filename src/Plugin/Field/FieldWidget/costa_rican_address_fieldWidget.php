@@ -210,7 +210,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       }
 
       // If we have address data in the database, load it into the form.
-      elseif (!empty($values[$delta])) {
+      else if (!empty($values[$delta])) {
         $element['province'] = $this->generateProvinceField();
         $element['province']['#value'] = $values[$delta]['province'];
 
