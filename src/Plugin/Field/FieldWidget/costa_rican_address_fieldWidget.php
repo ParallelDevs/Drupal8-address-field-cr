@@ -73,6 +73,11 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
           if (in_array($fieldCurrentlyModifying['province'], $element['province']['#options'])) {
             $element['canton'] = $this->generateCantonField($fieldCurrentlyModifying['province']);
           }
+          else
+          {
+          	$element = $this->loadBlankAddressField($element);
+	          $element['zipcode']['#value'] = null;
+          }
 
           // If we have a valid Canton, show the District field
           // this should evaluate to true "if a canton has been selected that belongs to the selected province".
