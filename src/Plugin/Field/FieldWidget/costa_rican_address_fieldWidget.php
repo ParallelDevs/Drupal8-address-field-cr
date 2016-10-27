@@ -166,9 +166,9 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 		    if ($validCantonSelected && $validDistrictSelected) {
 			    $element['zipcode'] = $this->generateZipCodeField($fieldCurrentlyModifying['district'], $fieldCurrentlyModifying['canton']);
 		    }
-	    }
 
-      $element['additionalinfo'] = $this->generateAdditionalInfoField();
+		    $element['additionalinfo'] = $this->generateAdditionalInfoField();
+	    }
     }
 
     // Else if nothing was updated, rebuild the field as it was, rebuild it from the DB, or load a blank one.
