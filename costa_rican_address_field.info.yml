@@ -1,5 +1,5 @@
 name: Costa Rican Address Field
 type: module
-description: My Awesome Module
+description: Simple module that adds address field options for Costa Rica.
 core: 8.x
 package: Fields
