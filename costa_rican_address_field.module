@@ -17,9 +17,9 @@ function costa_rican_address_field_help($route_name, RouteMatchInterface $route_
 /**
  *
  */
-function NgetProvinces() {
+function getProvinces() {
   $result = [];
-  $addresses = NgetAddresses();
+  $addresses = getAddresses();
 
   foreach ($addresses as $province => $province_cantons) {
     $result[$province] = $province;
@@ -31,9 +31,9 @@ function NgetProvinces() {
 /**
  *
  */
-function NgetCantons($province_name) {
+function getCantons($province_name) {
   $result = [];
-  $addresses = NgetAddresses();
+  $addresses = getAddresses();
 
   foreach ($addresses as $province => $province_cantons) {
     foreach ($province_cantons as $canton => $canton_districts) {
@@ -49,9 +49,9 @@ function NgetCantons($province_name) {
 /**
  *
  */
-function NgetDistricts($canton_name) {
+function getDistricts($canton_name) {
   $result = [];
-  $addresses = NgetAddresses();
+  $addresses = getAddresses();
 
   foreach ($addresses as $province => $province_cantons) {
     foreach ($province_cantons as $canton => $canton_districts) {
@@ -69,9 +69,9 @@ function NgetDistricts($canton_name) {
 /**
  *
  */
-function NgetZIPCodeByDistrict($district_name, $canton_name) {
+function getZIPCodeByDistrict($district_name, $canton_name) {
   $result = "";
-  $addresses = NgetAddresses();
+  $addresses = getAddresses();
 
   foreach ($addresses as $province => $province_cantons) {
     foreach ($province_cantons as $canton => $canton_districts) {
@@ -90,9 +90,9 @@ function NgetZIPCodeByDistrict($district_name, $canton_name) {
 /**
  *
  */
-function NgetAddressByZIPCode($zip_code) {
+function getAddressByZIPCode($zip_code) {
   $result = [];
-  $addresses = NgetAddresses();
+  $addresses = getAddresses();
 
   foreach ($addresses as $province => $province_cantons) {
     foreach ($province_cantons as $canton => $canton_districts) {
@@ -114,7 +114,7 @@ function NgetAddressByZIPCode($zip_code) {
 /**
  *
  */
-function NgetAddresses() {
+function getAddresses() {
   return json_decode(
         file_get_contents(dirname(__FILE__) . '/zips.json'),
         TRUE

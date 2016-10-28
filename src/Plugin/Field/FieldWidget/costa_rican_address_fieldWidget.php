@@ -102,7 +102,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
         // I think we need to check $delta here somehow.
         elseif ($triggeringElement == $field_name . "[" . $delta . "][zipcode]") {
           // Get the address (province/canton/district) for the given zipcode.
-          $address = NgetAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
+          $address = getAddressByZIPCode($fieldCurrentlyModifying['zipcode']);
 
           // If the user changed the zipcode field to a valid zipcode, rebuild the input field.
           if (!empty($address)) {
@@ -259,7 +259,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       '#required' => FALSE,
       '#title' => 'Province',
       '#empty_option' => t('- Select a Province -'),
-      '#options' => NGetProvinces(),
+      '#options' => getProvinces(),
       '#ajax' => [
         'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
         'progress' => [
@@ -280,7 +280,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       '#required' => FALSE,
       '#title' => t('Canton'),
       '#empty_option' => t('- Select a Canton -'),
-      '#options' => NgetCantons($province),
+      '#options' => getCantons($province),
       '#ajax' => [
         'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
         'progress' => [
@@ -301,7 +301,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       '#required' => FALSE,
       '#title' => t('District'),
       '#empty_option' => t('- Select a District -'),
-      '#options' => NgetDistricts($canton),
+      '#options' => getDistricts($canton),
       '#ajax' => [
         'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
         'progress' => [
@@ -336,7 +336,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
 	// If we got a district and canton, set the value of the zipcode field to the corrosponding zipcode.
     if ($district != NULL && $canton != NULL) {
-      $zipcode_field['#value'] = NgetZIPCodeByDistrict($district, $canton);
+      $zipcode_field['#value'] = getZIPCodeByDistrict($district, $canton);
     }
 
     return $zipcode_field;
