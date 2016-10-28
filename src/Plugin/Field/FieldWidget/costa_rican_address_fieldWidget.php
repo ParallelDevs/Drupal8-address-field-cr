@@ -23,6 +23,8 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterface {
 
+	static $field_name;
+
   /**
    * {@inheritdoc}
    *
@@ -34,6 +36,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
   	// Get the name of the field
   	$field_name = $items->getName();
+	  costa_rican_address_fieldWidget::$field_name = $field_name;
 
 	  // Create variable to hold identifier for the element that was changed (or triggered).
     $triggeringElement = \Drupal::request()->get('_triggering_element_name');
