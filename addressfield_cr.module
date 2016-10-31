@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains costa_rican_address_field.module..
+ * Contains addressfield_cr.module..
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -10,7 +10,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Implements hook_help().
  */
-function costa_rican_address_field_help($route_name, RouteMatchInterface $route_match) {
+function addressfield_cr_help($route_name, RouteMatchInterface $route_match) {
 
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\costa_rican_address_field\Plugin\Field\FieldType;
+namespace Drupal\addressfield_cr\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -14,11 +14,11 @@ use Drupal\Core\TypedData\DataDefinition;
  *   label = @Translation("Address Field CR new"),
  *   description = @Translation("This field stores a costa rican address field in the database."),
  *   category = @Translation("Address Field Costa Rica new"),
- *   default_widget = "costa_rican_address_field_default",
- *   default_formatter = "costa_rican_address_field_default"
+ *   default_widget = "addressfield_cr_default",
+ *   default_formatter = "addressfield_cr_default"
  * )
  */
-class costa_rican_address_fieldItem extends FieldItemBase {
+class addressfield_crItem extends FieldItemBase {
 
   /**
    * {@inheritdoc}

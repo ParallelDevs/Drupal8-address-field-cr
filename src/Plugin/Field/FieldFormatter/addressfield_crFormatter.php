@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\costa_rican_address_field\Plugin\Field\FieldFormatter;
+namespace Drupal\addressfield_cr\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -9,14 +9,14 @@ use Drupal\Core\Field\FieldItemListInterface;
  * Plugin implementation of the 'address_cr' formatter.
  *
  * @FieldFormatter(
- *   id = "costa_rican_address_field_default",
+ *   id = "addressfield_cr_default",
  *   label = @Translation("Address Field CR Display new"),
  *   field_types = {
  *     "address_cr"
  *   }
  * )
  */
-class costa_rican_address_fieldFormatter extends FormatterBase {
+class addressfield_crFormatter extends FormatterBase {
 
   /**
    * {@inheritdoc}

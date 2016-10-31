@@ -1,4 +1,4 @@
-name: Costa Rican Address Field
+name: Address Field CR
 type: module
 description: Simple module that adds address field options for Costa Rica.
 core: 8.x

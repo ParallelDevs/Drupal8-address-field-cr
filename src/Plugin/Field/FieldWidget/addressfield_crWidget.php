@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\costa_rican_address_field\Plugin\Field\FieldWidget;
+namespace Drupal\addressfield_cr\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
@@ -13,15 +13,15 @@ use Drupal\Core\Form\FormStateInterface;
  * Plugin implementation of the 'address_cr' widget.
  *
  * @FieldWidget(
- *   id = "costa_rican_address_field_default",
- *   module = "costa_rican_address_field",
- *   label = @Translation("Costa Rican Address Field Widget"),
+ *   id = "addressfield_cr_default",
+ *   module = "addressfield_cr",
+ *   label = @Translation("Address Field CR Widget"),
  *   field_types = {
  *     "address_cr"
  *   }
  * )
  */
-class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterface {
+class addressfield_crWidget extends WidgetBase implements WidgetInterface {
 
 	static $field_name;
 
@@ -36,7 +36,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
 
   	// Get the name of the field
   	$field_name = $items->getName();
-	  costa_rican_address_fieldWidget::$field_name = $field_name;
+	  addressfield_crWidget::$field_name = $field_name;
 
 	  // Create variable to hold identifier for the element that was changed (or triggered).
     $triggeringElement = \Drupal::request()->get('_triggering_element_name');
@@ -261,7 +261,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       '#empty_option' => t('- Select a Province -'),
       '#options' => getProvinces(),
       '#ajax' => [
-        'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
+        'callback' => 'Drupal\addressfield_cr\Plugin\Field\FieldWidget\addressfield_crWidget::replaceFormCallback',
         'progress' => [
           'type' => 'throbber',
           'event' => 'change',
@@ -282,7 +282,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       '#empty_option' => t('- Select a Canton -'),
       '#options' => getCantons($province),
       '#ajax' => [
-        'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
+        'callback' => 'Drupal\addressfield_cr\Plugin\Field\FieldWidget\addressfield_crWidget::replaceFormCallback',
         'progress' => [
           'type' => 'throbber',
           'event' => 'change',
@@ -303,7 +303,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       '#empty_option' => t('- Select a District -'),
       '#options' => getDistricts($canton),
       '#ajax' => [
-        'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
+        'callback' => 'Drupal\addressfield_cr\Plugin\Field\FieldWidget\addressfield_crWidget::replaceFormCallback',
         'progress' => [
           'type' => 'throbber',
           'event' => 'change',
@@ -324,7 +324,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
       '#required' => FALSE,
       '#size' => 10,
       '#ajax' => [
-        'callback' => 'Drupal\costa_rican_address_field\Plugin\Field\FieldWidget\costa_rican_address_fieldWidget::replaceFormCallback',
+        'callback' => 'Drupal\addressfield_cr\Plugin\Field\FieldWidget\addressfield_crWidget::replaceFormCallback',
         'progress' => [
           'type' => 'throbber',
           'event' => 'change',
@@ -359,7 +359,7 @@ class costa_rican_address_fieldWidget extends WidgetBase implements WidgetInterf
    */
   public function replaceFormCallback(&$form) {
     $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form[costa_rican_address_fieldWidget::$field_name]));
+    $ajax_response->addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form[addressfield_crWidget::$field_name]));
     return $ajax_response;
   }
 
