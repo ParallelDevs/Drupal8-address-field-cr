@@ -359,7 +359,7 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
    */
   public function replaceFormCallback(&$form) {
     $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new ReplaceCommand('.field--widget-costa-rican-address-field-default', $form[addressfield_crWidget::$field_name]));
+    $ajax_response->addCommand(new ReplaceCommand('.field--widget-addressfield-cr-default', $form[addressfield_crWidget::$field_name]));
     return $ajax_response;
   }
 

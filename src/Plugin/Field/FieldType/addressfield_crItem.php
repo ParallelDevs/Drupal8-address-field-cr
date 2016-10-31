@@ -11,9 +11,9 @@ use Drupal\Core\TypedData\DataDefinition;
  *
  * @FieldType(
  *   id = "address_cr",
- *   label = @Translation("Address Field CR new"),
+ *   label = @Translation("Address Field CR"),
  *   description = @Translation("This field stores a costa rican address field in the database."),
- *   category = @Translation("Address Field Costa Rica new"),
+ *   category = @Translation("Address Field CR"),
  *   default_widget = "addressfield_cr_default",
  *   default_formatter = "addressfield_cr_default"
  * )

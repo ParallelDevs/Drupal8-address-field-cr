@@ -10,7 +10,7 @@ use Drupal\Core\Field\FieldItemListInterface;
  *
  * @FieldFormatter(
  *   id = "addressfield_cr_default",
- *   label = @Translation("Address Field CR Display new"),
+ *   label = @Translation("Address Field CR Display"),
  *   field_types = {
  *     "address_cr"
  *   }
