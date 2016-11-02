@@ -50,7 +50,7 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
 			  : NULL;
 
 
-    if ($triggeringElement === NULL || $triggeringElement == "field_company_address_add_more") {
+    if ($triggeringElement === NULL || $triggeringElement == $field_name."_add_more") {
       $deltaUpdated = NULL;
     }
     else {
