@@ -23,7 +23,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class addressfield_crWidget extends WidgetBase implements WidgetInterface {
 
-	static $field_name;
+  static $field_name;
 
   /**
    * {@inheritdoc}
@@ -34,27 +34,26 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
 
-  	// Get the name of the field
-  	$field_name = $items->getName();
-	  addressfield_crWidget::$field_name = $field_name;
+    // Get the name of the field.
+    $field_name = $items->getName();
+    addressfield_crWidget::$field_name = $field_name;
 
-	  // Create variable to hold identifier for the element that was changed (or triggered).
+    // Create variable to hold identifier for the element that was changed (or triggered).
     $triggeringElement = \Drupal::request()->get('_triggering_element_name');
 
-		// This variable is a reference to any addresses that were found in the DB for the node currently being loaded.
-	  $values = $items->getValue();
+    // This variable is a reference to any addresses that were found in the DB for the node currently being loaded.
+    $values = $items->getValue();
 
-	  $fieldCurrentlyModifying =
-		  isset($form_state->getUserInput()[$field_name][$delta])
-			  ? $form_state->getUserInput()[$field_name][$delta]
-			  : NULL;
+    $fieldCurrentlyModifying =
+          isset($form_state->getUserInput()[$field_name][$delta])
+              ? $form_state->getUserInput()[$field_name][$delta]
+              : NULL;
 
-
-    if ($triggeringElement === NULL || $triggeringElement == $field_name."_add_more") {
+    if ($triggeringElement === NULL || $triggeringElement == $field_name . "_add_more") {
       $deltaUpdated = NULL;
     }
     else {
-    	// Parse the triggering element identifier for the int corresponding to the delta of the element changed.
+      // Parse the triggering element identifier for the int corresponding to the delta of the element changed.
       $deltaUpdated = intval(filter_var($triggeringElement, FILTER_SANITIZE_NUMBER_INT));
     }
 
@@ -66,7 +65,7 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
         if ($triggeringElement == $field_name . "[" . $delta . "][province]" ||
             $triggeringElement == $field_name . "[" . $delta . "][canton]" ||
             $triggeringElement == $field_name . "[" . $delta . "][district]" ||
-            $element['province'] != null) {
+            $element['province'] != NULL) {
           // Always show the Province field.
           $element['province'] = $this->generateProvinceField();
 
@@ -74,10 +73,9 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
           if (in_array($fieldCurrentlyModifying['province'], $element['province']['#options'])) {
             $element['canton'] = $this->generateCantonField($fieldCurrentlyModifying['province']);
           }
-          else
-          {
-          	$element = $this->loadBlankAddressField($element);
-	          $element['zipcode']['#value'] = null;
+          else {
+            $element = $this->loadBlankAddressField($element);
+            $element['zipcode']['#value'] = NULL;
           }
 
           // If we have a valid Canton, show the District field
@@ -127,9 +125,9 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
           else {
             $element = $this->loadBlankAddressField($element);
 
-	          // Reset the province and zipcode values.
-	          $element['province']['#value'] = "";
-	          $element['zipcode']['#value'] = "";
+            // Reset the province and zipcode values.
+            $element['province']['#value'] = "";
+            $element['zipcode']['#value'] = "";
           }
         }
       }
@@ -138,40 +136,38 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
     // Else if the field we're currently building wasn't changed, rebuild it with the original data.
     elseif (is_int($deltaUpdated) && $delta != $deltaUpdated) {
 
-    	if ($fieldCurrentlyModifying['province'] == "")
-	    {
-		    $element = $this ->loadBlankAddressField($element);
-	    }
-	    else
-	    {
-		    // Build and restore the value of the provice field.
-		    $element['province'] = $this->generateProvinceField();
-		    if ($fieldCurrentlyModifying['province'] != "" && $fieldCurrentlyModifying['province'] != NULL) {
-			    $element['province']['#value'] = $fieldCurrentlyModifying['province'];
-		    }
+      if ($fieldCurrentlyModifying['province'] == "") {
+        $element = $this->loadBlankAddressField($element);
+      }
+      else {
+        // Build and restore the value of the provice field.
+        $element['province'] = $this->generateProvinceField();
+        if ($fieldCurrentlyModifying['province'] != "" && $fieldCurrentlyModifying['province'] != NULL) {
+          $element['province']['#value'] = $fieldCurrentlyModifying['province'];
+        }
 
-		    // If we have a valid province, show the Canton field.
-		    if (in_array($fieldCurrentlyModifying['province'], $element['province']['#options'])) {
-			    $element['canton'] = $this->generateCantonField($fieldCurrentlyModifying['province']);
-		    }
+        // If we have a valid province, show the Canton field.
+        if (in_array($fieldCurrentlyModifying['province'], $element['province']['#options'])) {
+          $element['canton'] = $this->generateCantonField($fieldCurrentlyModifying['province']);
+        }
 
-		    // If we have a valid Canton, show the District field
-		    // this should evaluate to true "if a canton has been selected that belongs to the selected province".
-		    if (in_array($fieldCurrentlyModifying['canton'], $element['canton']['#options'])) {
-			    // We need to skip this operation if the user updated the province and has not yet selected a canton.
-			    $element['district'] = $this->generateDistrictField($fieldCurrentlyModifying['canton']);
-		    }
+        // If we have a valid Canton, show the District field
+        // this should evaluate to true "if a canton has been selected that belongs to the selected province".
+        if (in_array($fieldCurrentlyModifying['canton'], $element['canton']['#options'])) {
+          // We need to skip this operation if the user updated the province and has not yet selected a canton.
+          $element['district'] = $this->generateDistrictField($fieldCurrentlyModifying['canton']);
+        }
 
-		    $validCantonSelected = in_array($fieldCurrentlyModifying['canton'], $element['canton']['#options']);
-		    $validDistrictSelected = in_array($fieldCurrentlyModifying['district'], $element['district']['#options']);
+        $validCantonSelected = in_array($fieldCurrentlyModifying['canton'], $element['canton']['#options']);
+        $validDistrictSelected = in_array($fieldCurrentlyModifying['district'], $element['district']['#options']);
 
-		    // Display the zipcode field if the user has selected a valid canton and district.
-		    if ($validCantonSelected && $validDistrictSelected) {
-			    $element['zipcode'] = $this->generateZipCodeField($fieldCurrentlyModifying['district'], $fieldCurrentlyModifying['canton']);
-		    }
+        // Display the zipcode field if the user has selected a valid canton and district.
+        if ($validCantonSelected && $validDistrictSelected) {
+          $element['zipcode'] = $this->generateZipCodeField($fieldCurrentlyModifying['district'], $fieldCurrentlyModifying['canton']);
+        }
 
-		    $element['additionalinfo'] = $this->generateAdditionalInfoField();
-	    }
+        $element['additionalinfo'] = $this->generateAdditionalInfoField();
+      }
     }
 
     // Else if nothing was updated, rebuild the field as it was, rebuild it from the DB, or load a blank one.
@@ -213,7 +209,7 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
       }
 
       // If we have address data in the database, load it into the form.
-      else if (!empty($values[$delta])) {
+      elseif (!empty($values[$delta])) {
         $element['province'] = $this->generateProvinceField();
         $element['province']['#value'] = $values[$delta]['province'];
 
@@ -334,7 +330,7 @@ class addressfield_crWidget extends WidgetBase implements WidgetInterface {
       ],
     ];
 
-	// If we got a district and canton, set the value of the zipcode field to the corrosponding zipcode.
+    // If we got a district and canton, set the value of the zipcode field to the corrosponding zipcode.
     if ($district != NULL && $canton != NULL) {
       $zipcode_field['#value'] = getZIPCodeByDistrict($district, $canton);
     }
